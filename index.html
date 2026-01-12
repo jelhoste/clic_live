@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TempoMaster Pro</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ff9500">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+</head>
+<body class="light-mode">
+    <header class="top-bar">
+        <nav class="nav-container">
+            <button class="nav-btn" onclick="showScreen(1)">🏠</button>
+            <button class="nav-btn" onclick="showScreen(2)">📝</button>
+            <button class="nav-btn" onclick="showScreen(3)">📁</button>
+            <button class="nav-btn" onclick="showScreen(4)">⚙️</button>
+        </nav>
+        <div class="header-actions">
+            <button id="lock-btn" class="action-icon-btn hidden">🔓</button>
+            <button id="add-btn" class="action-icon-btn hidden">＋</button>
+        </div>
+    </header>
+
+    <main id="app">
+        <section id="screen-1" class="screen">
+            <div id="playlist-badge" class="centered-text playlist-name-display">Setlist</div>
+            <div id="tempo-visuals" class="visual-grid"></div>
+            <div id="song-display" class="centered-text">
+                <h2 id="current-song-name">...</h2>
+            </div>
+            <div class="controls-main">
+                <button class="btn-square-large" onclick="prevSong()">◀</button>
+                <button id="start-btn" onclick="toggleMetronome()">START</button>
+                <button class="btn-square-large" onclick="nextSong()">▶</button>
+            </div>
+            <div class="center-wrapper">
+                <button id="auto-btn" onclick="toggleAutoMode()">AUTO MODE</button>
+            </div>
+        </section>
+
+        <section id="screen-2" class="screen hidden">
+            <ul id="song-list" class="sortable-list"></ul>
+        </section>
+
+        <section id="screen-3" class="screen hidden">
+            <ul id="playlist-list" class="sortable-list"></ul>
+        </section>
+
+        <section id="screen-4" class="screen hidden">
+            <div class="settings-card">
+                <h3 class="centered-text">🎨 Apparence</h3>
+                <div class="setting-row">
+                    <span>Mode Sombre</span>
+                    <label class="switch">
+                        <input type="checkbox" id="dark-mode-toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="setting-row-vertical">
+                    <span class="centered-text">Taille Titre : <span id="font-val">24</span>px</span>
+                    <input type="range" id="font-size-slider" min="16" max="60">
+                </div>
+            </div>
+            <div class="settings-card">
+                <h3 class="centered-text">⏲️ Auto Mode</h3>
+                <div class="setting-row">
+                    <span>Pulsations avant arrêt</span>
+                    <input type="number" id="auto-pulses-input" class="small-input" style="width: 80px;">
+                </div>
+            </div>
+            <div class="settings-card">
+                <h3 class="centered-text">💾 Données</h3>
+                <div class="button-stack">
+                    <button class="big-action-btn" onclick="exportData()">📤 EXPORTER BACKUP</button>
+                    <button class="big-action-btn" onclick="importData()">📥 IMPORTER JSON</button>
+                    <button class="big-action-btn btn-danger-flat" onclick="resetApp()">⚠️ RESET TOTAL</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="action-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3 id="modal-title" class="centered-text">Action</h3>
+            <div id="modal-buttons" class="button-stack"></div>
+            <button class="btn-cancel-large" onclick="closeModal()">ANNULER</button>
+        </div>
+    </div>
+
+    <footer id="realtime-controls" class="bottom-bar hidden">
+        <div class="tempo-pod">
+            <button class="tempo-step" onclick="changeTempo(-1)">－</button>
+            <div class="tempo-input-wrapper">
+                <input type="number" id="rt-bpm-input" onchange="setLiveBpm(this.value)">
+                <span class="bpm-label">BPM</span>
+            </div>
+            <button class="tempo-step" onclick="changeTempo(1)">＋</button>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script>if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }</script>
+</body>
+</html>

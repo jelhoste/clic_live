@@ -1,0 +1,15 @@
+{
+  "name": "TempoMaster Pro",
+  "short_name": "TempoMaster",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#ff9500",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3031/3031734.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
