@@ -1,13 +1,13 @@
 {
-  "name": "SecurePro V23",
-  "short_name": "SecurePro",
+  "name": "TempoMaster Pro",
+  "short_name": "TempoMaster",
   "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#050505",
-  "theme_color": "#020C17",
+  "background_color": "#000000",
+  "theme_color": "#ff9500",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/564/564445.png",
+      "src": "https://cdn-icons-png.flaticon.com/512/3031/3031734.png",
       "sizes": "512x512",
       "type": "image/png"
     }
