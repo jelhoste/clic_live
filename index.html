@@ -3,90 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SecurePro V23</title>
-    
+    <title>TempoMaster Pro</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#020C17">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/564/564445.png">
-
+    <meta name="theme-color" content="#ff9500">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
-<body>
-    <header>
-        <button id="back-btn" class="hidden">⬅</button>
-        <h1 id="header-title">CATÉGORIES</h1>
-        <div style="display:flex;">
-            <button id="p1-btn" class="pop-btn hidden">P1</button>
-            <button id="p2-btn" class="pop-btn hidden">P2</button>
-            <button id="settings-btn">⚙️</button>
-            <button id="add-btn">+</button>
+<body class="light-mode">
+    <header class="top-bar">
+        <nav class="nav-container">
+            <button class="nav-btn" onclick="showScreen(1)">🏠</button>
+            <button class="nav-btn" onclick="showScreen(2)">📝</button>
+            <button class="nav-btn" onclick="showScreen(3)">📁</button>
+            <button class="nav-btn" onclick="showScreen(4)">⚙️</button>
+        </nav>
+        <div class="header-actions">
+            <button id="lock-btn" class="action-icon-btn hidden">🔓</button>
+            <button id="add-btn" class="action-icon-btn hidden">＋</button>
         </div>
     </header>
 
-    <main id="app"></main>
+    <main id="app">
+        <section id="screen-1" class="screen">
+            <div id="playlist-badge" class="centered-text playlist-name-display">Setlist</div>
+            <div id="tempo-visuals" class="visual-grid"></div>
+            <div id="song-display" class="centered-text">
+                <h2 id="current-song-name">...</h2>
+            </div>
+            <div class="controls-main">
+                <button class="btn-square-large" onclick="prevSong()">◀</button>
+                <button id="start-btn" onclick="toggleMetronome()">START</button>
+                <button class="btn-square-large" onclick="nextSong()">▶</button>
+            </div>
+            <div class="center-wrapper">
+                <button id="auto-btn" onclick="toggleAutoMode()">AUTO MODE</button>
+            </div>
+        </section>
 
-    <div id="modal-settings" class="modal hidden">
-        <div class="modal-content">
-            <h2 style="margin-top:0">Paramètres</h2>
-            <div id="dark-toggle-action" class="switch-container" style="cursor:pointer;">
-                <span>MODE SOMBRE</span>
-                <div class="toggle-track"></div>
-            </div>
-            <div class="setting-row">
-                <span>Taille Police</span>
-                <input type="range" id="range-fs" min="14" max="30" style="width:50%">
-            </div>
-            <hr>
-            <div style="font-weight:bold; color:var(--safe); margin-bottom:10px;">COULEURS MODE CLAIR</div>
-            <div class="setting-row"><span>Menu & Titre</span> <input type="color" id="c-light-m"></div>
-            <div class="setting-row"><span>Texte Éditeur</span> <input type="color" id="c-light-e"></div>
-            <hr>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
-                <button onclick="openMaster(0)">MASTER P1</button>
-                <button onclick="openMaster(1)">MASTER P2</button>
-            </div>
-            <button id="exp-btn" style="width:100%; margin-bottom:10px; background:#444; color:white;">EXPORTER BACKUP</button>
-            <button id="imp-btn" style="width:100%; margin-bottom:15px; background:#444; color:white;">IMPORTER BACKUP</button>
-            <input type="file" id="file-input" class="hidden">
-            <button style="width:100%; background:var(--danger); font-size:1.1rem; color:white; padding:15px; border-radius:12px;" onclick="closeModals()">FERMER</button>
-        </div>
-    </div>
+        <section id="screen-2" class="screen hidden">
+            <ul id="song-list" class="sortable-list"></ul>
+        </section>
 
-    <div id="modal-pop" class="modal hidden">
-        <div class="modal-content">
-            <h3 id="pop-title" style="margin-top:0">Pop-up</h3>
-            <div id="pop-simple-area"><textarea id="pop-input" style="min-height:280px;"></textarea></div>
-            <div id="pop-col-area" class="hidden">
-                <div style="display:flex; gap:10px;">
-                    <textarea id="pop-col-left" style="flex:3; height:220px;"></textarea>
-                    <textarea id="pop-col-right" style="flex:1; height:220px;"></textarea>
+        <section id="screen-3" class="screen hidden">
+            <ul id="playlist-list" class="sortable-list"></ul>
+        </section>
+
+        <section id="screen-4" class="screen hidden">
+            <div class="settings-card">
+                <h3 class="centered-text">🎨 Apparence</h3>
+                <div class="setting-row">
+                    <span>Mode Sombre</span>
+                    <label class="switch">
+                        <input type="checkbox" id="dark-mode-toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="setting-row-vertical">
+                    <span class="centered-text">Taille Titre : <span id="font-val">24</span>px</span>
+                    <input type="range" id="font-size-slider" min="16" max="60">
                 </div>
             </div>
-            <div id="pop-master-ctrls" class="hidden">
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:15px 0;">
-                    <button id="btn-overwrite" style="background:var(--danger); color:white;">ÉCRASER</button>
-                    <button id="btn-append" style="background:var(--safe); color:white;">AJOUTER</button>
+            <div class="settings-card">
+                <h3 class="centered-text">⏲️ Auto Mode</h3>
+                <div class="setting-row">
+                    <span>Pulsations avant arrêt</span>
+                    <input type="number" id="auto-pulses-input" class="small-input" style="width: 80px;">
                 </div>
             </div>
-            <button id="btn-toggle-cols" style="width:100%; background:#444; margin:10px 0; color:white;">FORMAT 3/1</button>
-            <button id="pop-save-btn" style="width:100%; background:var(--safe); height:65px; font-size:1.2rem; color:white;">VALIDER</button>
-        </div>
-    </div>
+            <div class="settings-card">
+                <h3 class="centered-text">💾 Données</h3>
+                <div class="button-stack">
+                    <button class="big-action-btn" onclick="exportData()">📤 EXPORTER BACKUP</button>
+                    <button class="big-action-btn" onclick="importData()">📥 IMPORTER JSON</button>
+                    <button class="big-action-btn btn-danger-flat" onclick="resetApp()">⚠️ RESET TOTAL</button>
+                </div>
+            </div>
+        </section>
+    </main>
 
-    <div id="modal-opt" class="modal hidden">
+    <div id="action-modal" class="modal hidden">
         <div class="modal-content">
-            <h3>Options</h3>
-            <input type="text" id="opt-name-field" style="width:100%; padding:20px; font-size:1.2rem; border-radius:15px; border:1px solid #ccc; box-sizing:border-box;">
-            <button id="btn-rename" style="width:100%; margin-top:25px; background:var(--safe); color:white;">RENOMMER</button>
-            <button id="btn-delete" style="width:100%; margin-top:12px; background:var(--danger); color:white;">SUPPRIMER</button>
-            <button style="width:100%; margin-top:12px; background:#888; color:white;" onclick="closeModals()">ANNULER</button>
+            <h3 id="modal-title" class="centered-text">Action</h3>
+            <div id="modal-buttons" class="button-stack"></div>
+            <button class="btn-cancel-large" onclick="closeModal()">ANNULER</button>
         </div>
     </div>
 
-    <canvas id="capture-canvas" style="display:none;"></canvas>
+    <footer id="realtime-controls" class="bottom-bar hidden">
+        <div class="tempo-pod">
+            <button class="tempo-step" onclick="changeTempo(-1)">－</button>
+            <div class="tempo-input-wrapper">
+                <input type="number" id="rt-bpm-input" onchange="setLiveBpm(this.value)">
+                <span class="bpm-label">BPM</span>
+            </div>
+            <button class="tempo-step" onclick="changeTempo(1)">＋</button>
+        </div>
+    </footer>
+
     <script src="app.js"></script>
+    <script>if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }</script>
 </body>
 </html>
